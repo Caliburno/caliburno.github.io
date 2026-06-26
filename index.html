@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caliburno — Backend Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Tokens ─────────────────────────────────────────────── */
+    :root {
+      --bg:        #0a0a1a;
+      --bg-card:   #0f0f2a;
+      --bg-card2:  #13132e;
+      --cyan:      #00e5ff;
+      --cyan-dim:  #00b8cc;
+      --violet:    #7c3aed;
+      --violet-dim:#5b21b6;
+      --text:      #e2e8f0;
+      --text-muted:#94a3b8;
+      --border:    rgba(0, 229, 255, 0.12);
+      --border-hover: rgba(0, 229, 255, 0.6);
+      --glow:      0 0 18px rgba(0, 229, 255, 0.35), 0 0 40px rgba(0, 229, 255, 0.15);
+      --glow-v:    0 0 18px rgba(124, 58, 237, 0.4), 0 0 40px rgba(124, 58, 237, 0.18);
+    }
+
+    /* ─── Reset ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── Stars background ───────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 40%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 8%,  rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 72% 60%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 25%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 20% 75%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 65% 85%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 90%, rgba(255,255,255,0.2) 0%, transparent 100%),
+        radial-gradient(1px 1px at 42% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 5%  50%, rgba(255,255,255,0.2) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── Nav ────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(10, 10, 26, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--cyan);
+      letter-spacing: 0.12em;
+      text-shadow: var(--glow);
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover {
+      color: var(--cyan);
+      text-decoration: none;
+    }
+
+    /* ─── Layout ─────────────────────────────────────────────── */
+    main { position: relative; z-index: 1; }
+    section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+    }
+    section:first-child { padding-top: 10rem; }
+
+    /* ─── Section labels ─────────────────────────────────────── */
+    .section-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 0.75rem;
+      opacity: 0.8;
+    }
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 3rem;
+      line-height: 1.2;
+    }
+
+    /* ─── Hero ───────────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 6rem;
+    }
+    .hero-inner {
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+      width: 100%;
+    }
+    .hero-logo {
+      flex-shrink: 0;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      box-shadow: var(--glow);
+      transition: box-shadow 0.4s;
+    }
+    .hero-logo:hover {
+      box-shadow: 0 0 30px rgba(0, 229, 255, 0.6), 0 0 80px rgba(0, 229, 255, 0.25);
+    }
+    .hero-text {}
+    .hero-eyebrow {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 0.75rem;
+      opacity: 0.75;
+    }
+    .hero-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+    .hero-name span {
+      color: var(--cyan);
+      text-shadow: var(--glow);
+    }
+    .hero-tagline {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      background: transparent;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+    }
+    .hero-cta:hover {
+      background: rgba(0, 229, 255, 0.08);
+      box-shadow: var(--glow);
+      color: var(--cyan);
+      text-decoration: none;
+    }
+
+    /* ─── About ──────────────────────────────────────────────── */
+    #about p {
+      color: var(--text-muted);
+      max-width: 680px;
+      font-size: 1.05rem;
+    }
+    #about p + p { margin-top: 1rem; }
+    #about strong { color: var(--text); font-weight: 600; }
+
+    /* ─── Skills ─────────────────────────────────────────────── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .skill-group {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.25rem 1.5rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .skill-group:hover {
+      border-color: rgba(124, 58, 237, 0.4);
+      box-shadow: var(--glow-v);
+    }
+    .skill-group-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 0.75rem;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .skill-tag {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 2px;
+      padding: 0.2rem 0.55rem;
+    }
+
+    /* ─── Projects ───────────────────────────────────────────── */
+    .projects-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .project-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem 2rem 2rem 2rem;
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+      overflow: hidden;
+    }
+    /* The signature neon-edge glow */
+    .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity 0.4s;
+      box-shadow: inset 0 0 0 1px var(--cyan), 0 0 24px rgba(0,229,255,0.2), 0 0 60px rgba(0,229,255,0.08);
+    }
+    .project-card:hover::before { opacity: 1; }
+    .project-card:hover {
+      background: var(--bg-card2);
+      border-color: transparent;
+    }
+    .project-flag {
+      position: absolute;
+      top: 0; right: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      background: rgba(0,229,255,0.08);
+      color: var(--cyan);
+      border-bottom-left-radius: 4px;
+      border: 1px solid rgba(0,229,255,0.2);
+      border-top: none;
+      border-right: none;
+    }
+    .project-flag.wip {
+      background: rgba(124,58,237,0.1);
+      color: var(--violet);
+      border-color: rgba(124,58,237,0.25);
+    }
+    .project-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .project-subtitle {
+      font-size: 0.85rem;
+      color: var(--cyan);
+      margin-bottom: 1rem;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .project-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      max-width: 700px;
+    }
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+    }
+    .project-tech span {
+      font-size: 0.75rem;
+      color: var(--cyan-dim);
+      background: rgba(0,229,255,0.06);
+      border: 1px solid rgba(0,229,255,0.15);
+      border-radius: 2px;
+      padding: 0.2rem 0.6rem;
+      font-weight: 500;
+    }
+    .project-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .project-link {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+    .project-link:hover {
+      color: var(--cyan);
+      text-decoration: none;
+    }
+    .project-link svg { width: 14px; height: 14px; }
+
+    /* ─── Highlight pair (CLInventory → APInventory) ─────────── */
+    .project-card.pair {
+      border-left: 2px solid rgba(124,58,237,0.35);
+    }
+    .evolution-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      color: var(--violet);
+      background: rgba(124,58,237,0.08);
+      border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 2px;
+      padding: 0.2rem 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    /* ─── Contact ────────────────────────────────────────────── */
+    #contact {
+      text-align: center;
+    }
+    #contact .section-title { margin-bottom: 1rem; }
+    #contact p {
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .contact-btn:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: var(--glow);
+      text-decoration: none;
+    }
+    .contact-btn svg { width: 16px; height: 16px; }
+
+    /* ─── Footer ─────────────────────────────────────────────── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    /* ─── Divider ─────────────────────────────────────────────── */
+    .section-divider {
+      max-width: 960px;
+      margin: 0 auto;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { gap: 1.2rem; }
+      .hero-inner { flex-direction: column; gap: 2rem; text-align: center; }
+      .hero-logo { width: 120px; height: 120px; }
+      .hero-tagline { margin-left: auto; margin-right: auto; }
+      .hero-cta { margin: 0 auto; }
+      section { padding: 4rem 1.25rem; }
+      .project-card { padding: 1.5rem; }
+    }
+
+    /* ─── Reduced motion ─────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav aria-label="Main navigation">
+    <span class="nav-logo">CALIBURNO</span>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <!-- HERO -->
+    <section id="hero">
+      <div class="hero-inner">
+        <img
+          class="hero-logo"
+          src="./logo.png"
+          alt="Caliburno logo — sword in stone, neon style" 
+          onerror="this.style.display='none'"
+        />
+        <div class="hero-text">
+          <p class="hero-eyebrow">Backend Developer</p>
+          <h1 class="hero-name">Darío<br /><span>Buffa</span></h1>
+          <p class="hero-tagline">
+            I build backend systems that solve real problems —
+            clean architecture, practical design, software that gets used.
+          </p>
+          <a class="hero-cta" href="#projects">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            View projects
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <p class="section-label">About</p>
+      <h2 class="section-title">Who I am</h2>
+      <p>
+        I'm a self-taught backend developer based in <strong>Montevideo, Uruguay</strong>,
+        currently completing a degree in informatics at UTU's Instituto Tecnológico de Informática (ITI).
+        My focus is <strong>Java and Spring Boot</strong>, building systems with clean architecture,
+        proper separation of concerns, and real-world use cases in mind.
+      </p>
+      <p>
+        I don't build toy apps. Every project in this portfolio started as a real need —
+        a working academy, a private clinic, an institutional system.
+        I'm looking for a professional role in software development,
+        where I can contribute solid backend fundamentals and keep growing fast.
+      </p>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <p class="section-label">Technical stack</p>
+      <h2 class="section-title">What I work with</h2>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <p class="skill-group-label">Primary</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Java 21</span>
+            <span class="skill-tag">Spring Boot</span>
+            <span class="skill-tag">Spring Data JPA</span>
+            <span class="skill-tag">Hibernate</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <p class="skill-group-label">APIs & Web</p>
+          <div class="skill-tags">
+            <span class="skill-tag">REST APIs</span>
+            <span class="skill-tag">Thymeleaf</span>
+            <span class="skill-tag">HTML/CSS</span>
+            <span class="skill-tag">JavaScript</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <p class="skill-group-label">Databases</p>
+          <div class="skill-tags">
+            <span class="skill-tag">MySQL</span>
+            <span class="skill-tag">PostgreSQL</span>
+            <span class="skill-tag">H2</span>
+            <span class="skill-tag">SQLite</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <p class="skill-group-label">Secondary</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">Flask</span>
+            <span class="skill-tag">Tkinter</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <p class="skill-group-label">Tools</p>
+          <div class="skill-tags">
+            <span class="skill-tag">Git</span>
+            <span class="skill-tag">GitHub</span>
+            <span class="skill-tag">Maven</span>
+            <span class="skill-tag">Linux</span>
+            <span class="skill-tag">IntelliJ</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <p class="section-label">Work</p>
+      <h2 class="section-title">Projects</h2>
+      <div class="projects-list">
+
+        <!-- Academy Accounting -->
+        <div class="project-card">
+          <span class="project-flag">Flagship</span>
+          <h3 class="project-title">Academy Accounting</h3>
+          <p class="project-subtitle">Full-stack management system for a real English academy</p>
+          <p class="project-desc">
+            Tracks student enrollments, monthly payments, exam registrations, sibling discounts,
+            and generates financial reports. Built with a dual-architecture approach: a RESTful API
+            backend and a Thymeleaf web interface sharing the same business logic layer.
+            Actively used in production.
+          </p>
+          <div class="project-tech">
+            <span>Java 21</span>
+            <span>Spring Boot</span>
+            <span>Spring Data JPA</span>
+            <span>Thymeleaf</span>
+            <span>MySQL</span>
+            <span>Bootstrap 5</span>
+            <span>Maven</span>
+          </div>
+          <div class="project-links">
+            <a class="project-link" href="https://github.com/Caliburno/academy-accounting" target="_blank" rel="noopener">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48.99.1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              Source
+            </a>
+          </div>
+        </div>
+
+        <!-- ClinApp / ContabilidadClinica — WIP -->
+        <div class="project-card">
+          <span class="project-flag wip">In Development</span>
+          <h3 class="project-title">ClinApp Web</h3>
+          <p class="project-subtitle">Clinic accounting SaaS — in active development</p>
+          <p class="project-desc">
+            A web-based clinic management system built for a private psychology practice,
+            evolving from two earlier desktop versions (Java Swing, Python/Tkinter).
+            The current web version is being developed for commercial distribution to healthcare professionals.
+            Real user, real data, real feedback loop.
+          </p>
+          <div class="project-tech">
+            <span>Java</span>
+            <span>Spring Boot</span>
+            <span>MySQL</span>
+            <span>REST API</span>
+          </div>
+          <div class="project-links">
+            <a class="project-link" href="https://github.com/Caliburno/ContabilidadClinica" target="_blank" rel="noopener">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48.99.1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              Source
+            </a>
+          </div>
+        </div>
+
+        <!-- CLInventory → APInventory -->
+        <div class="project-card pair">
+          <div class="evolution-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            Evolution: CLI → REST API
+          </div>
+          <h3 class="project-title">CLInventory → APInventory</h3>
+          <p class="project-subtitle">Inventory system — from command line to RESTful web service</p>
+          <p class="project-desc">
+            Two projects, one story. CLInventory is a full-featured CLI inventory manager built
+            as a first Python exercise. APInventory is its direct evolution into a Flask REST API —
+            with the same database layer unchanged. The pair demonstrates that modular architecture
+            isn't just theory: the business logic survived a complete interface swap without rewriting.
+          </p>
+          <div class="project-tech">
+            <span>Python</span>
+            <span>Flask</span>
+            <span>SQLite</span>
+            <span>REST API</span>
+          </div>
+          <div class="project-links">
+            <a class="project-link" href="https://github.com/Caliburno/CLInventory" target="_blank" rel="noopener">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48.99.1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              CLInventory
+            </a>
+            <a class="project-link" href="https://github.com/Caliburno/APInventory" target="_blank" rel="noopener">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48.99.1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              APInventory
+            </a>
+          </div>
+        </div>
+
+        <!-- RegistroInasistencias -->
+        <div class="project-card">
+          <h3 class="project-title">RegistroInasistencias</h3>
+          <p class="project-subtitle">Teacher absence tracking — institutional desktop app</p>
+          <p class="project-desc">
+            Group project developed for ITI-UTU. Administrative staff log teacher absences;
+            the system calculates affected student groups and displays current absences
+            on a read-only screen designed for hall monitors.
+            Built with a team of three, coordinating backend logic, database design, and frontend.
+          </p>
+          <div class="project-tech">
+            <span>Java</span>
+            <span>Swing</span>
+            <span>MySQL</span>
+            <span>NetBeans</span>
+          </div>
+          <div class="project-links">
+            <a class="project-link" href="https://github.com/Caliburno/RegistroInasistencias" target="_blank" rel="noopener">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48.99.1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              Source
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <p class="section-label">Contact</p>
+      <h2 class="section-title">Let's talk</h2>
+      <p>
+        I'm actively looking for a role in software development.
+        If you have an opportunity or just want to connect, reach out.
+      </p>
+      <div class="contact-links">
+        <a class="contact-btn" href="https://github.com/Caliburno" target="_blank" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48.99.1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+        <a class="contact-btn" href="mailto:dario.buffa@gmail.com">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          Email
+        </a>
+        <a class="contact-btn" href="https://www.linkedin.com/in/dario-buffa/" target="_blank" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.37V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.26 2.37 4.26 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.8 24 1.77 24h20.45C23.2 24 24 23.23 24 22.27V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>© 2026 Caliburno · Built with vanilla HTML/CSS · Hosted on GitHub Pages</p>
+  </footer>
+
+</body>
+</html>
