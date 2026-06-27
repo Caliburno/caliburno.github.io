@@ -121,6 +121,32 @@
       border-color: var(--cyan);
       box-shadow: var(--glow);
     }
+    /* Hamburger button — hidden on desktop, shown on mobile */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: var(--text-muted);
+      transition: transform 0.25s, opacity 0.25s, background 0.2s;
+    }
+    .nav-toggle:hover span { background: var(--cyan); }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
     /* ─── Layout ─────────────────────────────────────────────── */
     main { position: relative; z-index: 1; }
@@ -470,15 +496,42 @@
 
     /* ─── Responsive ─────────────────────────────────────────── */
     @media (max-width: 640px) {
-      nav { padding: 1rem 1.25rem; }
-      .nav-right { gap: 1rem; }
-      .nav-links { gap: 1.2rem; }
+      nav { padding: 0.75rem 1.25rem; }
+      .nav-right { gap: 0.6rem; }
+
+      /* Show the hamburger, turn the link list into a dropdown panel */
+      .nav-toggle { display: inline-flex; }
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        background: rgba(10, 10, 26, 0.97);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 0.25rem 0;
+        display: none;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-links a {
+        display: block;
+        padding: 0.95rem 1.5rem;
+        font-size: 0.9rem;
+      }
+      .lang-toggle { min-height: 40px; padding: 0 0.7rem; }
+
       .hero-inner { flex-direction: column; gap: 2rem; text-align: center; }
       .hero-logo { width: 120px; height: 120px; }
+      .hero-eyebrow { letter-spacing: 0.2em; }
       .hero-tagline { margin-left: auto; margin-right: auto; }
       .hero-cta { margin: 0 auto; }
       section { padding: 4rem 1.25rem; }
+      section:first-child { padding-top: 7rem; }
       .project-card { padding: 1.5rem; }
+      .contact-links { gap: 1rem; }
     }
 
     /* ─── Reduced motion ─────────────────────────────────────── */
@@ -493,13 +546,16 @@
   <nav aria-label="Main navigation">
     <span class="nav-logo">CALIBURNO</span>
     <div class="nav-right">
-      <ul class="nav-links">
+      <ul class="nav-links" id="nav-links">
         <li><a href="#about" data-i18n="nav.about">About</a></li>
         <li><a href="#skills" data-i18n="nav.skills">Skills</a></li>
         <li><a href="#projects" data-i18n="nav.projects">Projects</a></li>
         <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
       </ul>
       <button id="lang-toggle" class="lang-toggle" type="button" aria-label="Switch language">ES</button>
+      <button id="nav-toggle" class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
 
@@ -510,7 +566,7 @@
       <div class="hero-inner">
         <img
           class="hero-logo"
-          src="https://raw.githubusercontent.com/Caliburno/Caliburno/main/logo.png"
+          src="logo.png"
           alt="Caliburno logo — sword in stone, neon style"
           onerror="this.style.display='none'"
         />
@@ -544,7 +600,7 @@
       <p data-i18n="about.p2">
         I don't build toy apps. Every project in this portfolio started as a real need —
         a working academy, a private clinic, an institutional system.
-        I'm looking for a professional role in software development,
+        I'm looking for a job in software development,
         where I can contribute solid backend fundamentals and keep growing fast.
       </p>
     </section>
@@ -731,7 +787,7 @@
       <p class="section-label" data-i18n="contact.label">Contact</p>
       <h2 class="section-title" data-i18n="contact.title">Let's talk</h2>
       <p data-i18n="contact.p">
-        I'm actively looking for a role in software development.
+        I'm actively looking for a job in software development.
         If you have an opportunity or just want to connect, reach out.
       </p>
       <div class="contact-links">
@@ -739,11 +795,11 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48.99.1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
           GitHub
         </a>
-        <a class="contact-btn" href="mailto:dario.buffa@gmail.com">
+        <a class="contact-btn" href="mailto:dario.buffa@gmail.com?subject=Contacto%20desde%20tu%20portfolio">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
           <span data-i18n="contact.email">Email</span>
         </a>
-        <a class="contact-btn" href="https://www.linkedin.com/in/dario-buffa" target="_blank" rel="noopener">
+        <a class="contact-btn" href="https://www.linkedin.com/in/dario-buffa/" target="_blank" rel="noopener">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.37V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.26 2.37 4.26 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.8 24 1.77 24h20.45C23.2 24 24 23.23 24 22.27V1.73C24 .77 23.2 0 22.22 0z"/></svg>
           LinkedIn
         </a>
@@ -770,7 +826,7 @@
         "about.label": "About",
         "about.title": "Who I am",
         "about.p1": "I'm a self-taught backend developer based in <strong>Montevideo, Uruguay</strong>, currently completing a degree in informatics at UTU's Instituto Tecnológico de Informática (ITI). My focus is <strong>Java and Spring Boot</strong>, building systems with clean architecture, proper separation of concerns, and real-world use cases in mind.",
-        "about.p2": "I don't build toy apps. Every project in this portfolio started as a real need — a working academy, a private clinic, an institutional system. I'm looking for a professional role in software development, where I can contribute solid backend fundamentals and keep growing fast.",
+        "about.p2": "I don't build toy apps. Every project in this portfolio started as a real need — a working academy, a private clinic, an institutional system. I'm looking for a job in software development, where I can contribute solid backend fundamentals and keep growing fast.",
         "skills.label": "Technical stack",
         "skills.title": "What I work with",
         "skills.primary": "Primary",
@@ -795,7 +851,7 @@
         "contact.label": "Contact",
         "contact.title": "Let's talk",
         "contact.email": "Email",
-        "contact.p": "I'm actively looking for a role in software development. If you have an opportunity or just want to connect, reach out.",
+        "contact.p": "I'm actively looking for a job in software development. If you have an opportunity or just want to connect, reach out.",
         "footer": "© 2026 Caliburno · Built with vanilla HTML/CSS · Hosted on GitHub Pages"
       },
       es: {
@@ -809,7 +865,7 @@
         "about.label": "Sobre mí",
         "about.title": "Quién soy",
         "about.p1": "Soy desarrollador backend autodidacta, radicado en <strong>Montevideo, Uruguay</strong>, cursando actualmente el bachillerato en informática en el Instituto Tecnológico de Informática (ITI) de UTU. Mi foco es <strong>Java y Spring Boot</strong>, construyendo sistemas con arquitectura limpia, separación de responsabilidades y casos de uso reales en mente.",
-        "about.p2": "No construyo apps de juguete. Cada proyecto de este portfolio nació de una necesidad real — una academia en funcionamiento, una clínica privada, un sistema institucional. Busco mi primer rol profesional en desarrollo de software, donde pueda aportar fundamentos sólidos de backend y seguir creciendo rápido.",
+        "about.p2": "No construyo apps de juguete. Cada proyecto de este portfolio nació de una necesidad real — una academia en funcionamiento, una clínica privada, un sistema institucional. Busco trabajo en desarrollo de software, donde pueda aportar fundamentos sólidos de backend y seguir creciendo rápido.",
         "skills.label": "Stack técnico",
         "skills.title": "Con qué trabajo",
         "skills.primary": "Principal",
@@ -834,7 +890,7 @@
         "contact.label": "Contacto",
         "contact.title": "Hablemos",
         "contact.email": "Email",
-        "contact.p": "Estoy buscando activamente mi primer rol en desarrollo de software. Si tenés una oportunidad o simplemente querés conectar, escribime.",
+        "contact.p": "Estoy buscando activamente trabajo en desarrollo de software. Si tenés una oportunidad o simplemente querés conectar, escribime.",
         "footer": "© 2026 Caliburno · Hecho con HTML/CSS vanilla · Alojado en GitHub Pages"
       }
     };
@@ -869,6 +925,24 @@
     document.getElementById('lang-toggle').addEventListener('click', function () {
       const current = document.documentElement.lang === 'es' ? 'es' : 'en';
       applyLanguage(current === 'en' ? 'es' : 'en');
+    });
+
+    // ─── Mobile menu (hamburger) ───────────────────────────────
+    const navToggle = document.getElementById('nav-toggle');
+    const navLinks = document.getElementById('nav-links');
+    function closeMenu() {
+      navLinks.classList.remove('open');
+      navToggle.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+    navToggle.addEventListener('click', function () {
+      const isOpen = navLinks.classList.toggle('open');
+      navToggle.classList.toggle('open', isOpen);
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    // Close the menu after tapping any link
+    navLinks.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', closeMenu);
     });
 
     initLanguage();
