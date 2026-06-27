@@ -81,6 +81,11 @@
       letter-spacing: 0.12em;
       text-shadow: var(--glow);
     }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+    }
     .nav-links {
       display: flex;
       gap: 2rem;
@@ -97,6 +102,24 @@
     .nav-links a:hover {
       color: var(--cyan);
       text-decoration: none;
+    }
+    .lang-toggle {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .lang-toggle:hover {
+      color: var(--cyan);
+      border-color: var(--cyan);
+      box-shadow: var(--glow);
     }
 
     /* ─── Layout ─────────────────────────────────────────────── */
@@ -448,6 +471,7 @@
     /* ─── Responsive ─────────────────────────────────────────── */
     @media (max-width: 640px) {
       nav { padding: 1rem 1.25rem; }
+      .nav-right { gap: 1rem; }
       .nav-links { gap: 1.2rem; }
       .hero-inner { flex-direction: column; gap: 2rem; text-align: center; }
       .hero-logo { width: 120px; height: 120px; }
@@ -468,12 +492,15 @@
   <!-- NAV -->
   <nav aria-label="Main navigation">
     <span class="nav-logo">CALIBURNO</span>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#about" data-i18n="nav.about">About</a></li>
+        <li><a href="#skills" data-i18n="nav.skills">Skills</a></li>
+        <li><a href="#projects" data-i18n="nav.projects">Projects</a></li>
+        <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+      </ul>
+      <button id="lang-toggle" class="lang-toggle" type="button" aria-label="Switch language">ES</button>
+    </div>
   </nav>
 
   <main>
@@ -483,20 +510,20 @@
       <div class="hero-inner">
         <img
           class="hero-logo"
-          src="./Caliburno logo.jpg"
+          src="https://raw.githubusercontent.com/Caliburno/Caliburno/main/logo.png"
           alt="Caliburno logo — sword in stone, neon style"
           onerror="this.style.display='none'"
         />
         <div class="hero-text">
-          <p class="hero-eyebrow">Backend Developer</p>
+          <p class="hero-eyebrow" data-i18n="hero.eyebrow">Backend Developer</p>
           <h1 class="hero-name">Darío<br /><span>Buffa</span></h1>
-          <p class="hero-tagline">
+          <p class="hero-tagline" data-i18n="hero.tagline">
             I build backend systems that solve real problems —
             clean architecture, practical design, software that gets used.
           </p>
           <a class="hero-cta" href="#projects">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            View projects
+            <span data-i18n="hero.cta">View projects</span>
           </a>
         </div>
       </div>
@@ -506,15 +533,15 @@
 
     <!-- ABOUT -->
     <section id="about">
-      <p class="section-label">About</p>
-      <h2 class="section-title">Who I am</h2>
-      <p>
+      <p class="section-label" data-i18n="about.label">About</p>
+      <h2 class="section-title" data-i18n="about.title">Who I am</h2>
+      <p data-i18n="about.p1">
         I'm a self-taught backend developer based in <strong>Montevideo, Uruguay</strong>,
         currently completing a degree in informatics at UTU's Instituto Tecnológico de Informática (ITI).
         My focus is <strong>Java and Spring Boot</strong>, building systems with clean architecture,
         proper separation of concerns, and real-world use cases in mind.
       </p>
-      <p>
+      <p data-i18n="about.p2">
         I don't build toy apps. Every project in this portfolio started as a real need —
         a working academy, a private clinic, an institutional system.
         I'm looking for a professional role in software development,
@@ -526,11 +553,11 @@
 
     <!-- SKILLS -->
     <section id="skills">
-      <p class="section-label">Technical stack</p>
-      <h2 class="section-title">What I work with</h2>
+      <p class="section-label" data-i18n="skills.label">Technical stack</p>
+      <h2 class="section-title" data-i18n="skills.title">What I work with</h2>
       <div class="skills-grid">
         <div class="skill-group">
-          <p class="skill-group-label">Primary</p>
+          <p class="skill-group-label" data-i18n="skills.primary">Primary</p>
           <div class="skill-tags">
             <span class="skill-tag">Java 21</span>
             <span class="skill-tag">Spring Boot</span>
@@ -539,7 +566,7 @@
           </div>
         </div>
         <div class="skill-group">
-          <p class="skill-group-label">APIs & Web</p>
+          <p class="skill-group-label" data-i18n="skills.apis">APIs & Web</p>
           <div class="skill-tags">
             <span class="skill-tag">REST APIs</span>
             <span class="skill-tag">Thymeleaf</span>
@@ -548,7 +575,7 @@
           </div>
         </div>
         <div class="skill-group">
-          <p class="skill-group-label">Databases</p>
+          <p class="skill-group-label" data-i18n="skills.databases">Databases</p>
           <div class="skill-tags">
             <span class="skill-tag">MySQL</span>
             <span class="skill-tag">PostgreSQL</span>
@@ -557,7 +584,7 @@
           </div>
         </div>
         <div class="skill-group">
-          <p class="skill-group-label">Secondary</p>
+          <p class="skill-group-label" data-i18n="skills.secondary">Secondary</p>
           <div class="skill-tags">
             <span class="skill-tag">Python</span>
             <span class="skill-tag">Flask</span>
@@ -565,7 +592,7 @@
           </div>
         </div>
         <div class="skill-group">
-          <p class="skill-group-label">Tools</p>
+          <p class="skill-group-label" data-i18n="skills.tools">Tools</p>
           <div class="skill-tags">
             <span class="skill-tag">Git</span>
             <span class="skill-tag">GitHub</span>
@@ -581,16 +608,16 @@
 
     <!-- PROJECTS -->
     <section id="projects">
-      <p class="section-label">Work</p>
-      <h2 class="section-title">Projects</h2>
+      <p class="section-label" data-i18n="projects.label">Work</p>
+      <h2 class="section-title" data-i18n="projects.title">Projects</h2>
       <div class="projects-list">
 
         <!-- Academy Accounting -->
         <div class="project-card">
-          <span class="project-flag">Flagship</span>
+          <span class="project-flag" data-i18n="p1.flag">Flagship</span>
           <h3 class="project-title">Academy Accounting</h3>
-          <p class="project-subtitle">Full-stack management system for a real English academy</p>
-          <p class="project-desc">
+          <p class="project-subtitle" data-i18n="p1.subtitle">Full-stack management system for a real English academy</p>
+          <p class="project-desc" data-i18n="p1.desc">
             Tracks student enrollments, monthly payments, exam registrations, sibling discounts,
             and generates financial reports. Built with a dual-architecture approach: a RESTful API
             backend and a Thymeleaf web interface sharing the same business logic layer.
@@ -608,19 +635,19 @@
           <div class="project-links">
             <a class="project-link" href="https://github.com/Caliburno/academy-accounting" target="_blank" rel="noopener">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48.99.1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-              Source
+              <span data-i18n="link.source">Source</span>
             </a>
           </div>
         </div>
 
         <!-- ClinApp / ContabilidadClinica — WIP -->
         <div class="project-card">
-          <span class="project-flag wip">In Development</span>
+          <span class="project-flag wip" data-i18n="p2.flag">In Development</span>
           <h3 class="project-title">ClinApp Web</h3>
-          <p class="project-subtitle">Clinic accounting SaaS — in active development</p>
-          <p class="project-desc">
+          <p class="project-subtitle" data-i18n="p2.subtitle">Clinic accounting SaaS — in active development</p>
+          <p class="project-desc" data-i18n="p2.desc">
             A web-based clinic management system built for a private psychology practice,
-            evolving from two earlier desktop versions (Java JavaFX, Python/Tkinter).
+            evolving from two earlier desktop versions (Java Swing, Python/Tkinter).
             The current web version is being developed for commercial distribution to healthcare professionals.
             Real user, real data, real feedback loop.
           </p>
@@ -633,7 +660,7 @@
           <div class="project-links">
             <a class="project-link" href="https://github.com/Caliburno/ContabilidadClinica" target="_blank" rel="noopener">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48.99.1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-              Source
+              <span data-i18n="link.source">Source</span>
             </a>
           </div>
         </div>
@@ -642,11 +669,11 @@
         <div class="project-card pair">
           <div class="evolution-badge">
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            Evolution: CLI → REST API
+            <span data-i18n="p3.evolution">Evolution: CLI → REST API</span>
           </div>
           <h3 class="project-title">CLInventory → APInventory</h3>
-          <p class="project-subtitle">Inventory system — from command line to RESTful web service</p>
-          <p class="project-desc">
+          <p class="project-subtitle" data-i18n="p3.subtitle">Inventory system — from command line to RESTful web service</p>
+          <p class="project-desc" data-i18n="p3.desc">
             Two projects, one story. CLInventory is a full-featured CLI inventory manager built
             as a first Python exercise. APInventory is its direct evolution into a Flask REST API —
             with the same database layer unchanged. The pair demonstrates that modular architecture
@@ -673,8 +700,8 @@
         <!-- RegistroInasistencias -->
         <div class="project-card">
           <h3 class="project-title">RegistroInasistencias</h3>
-          <p class="project-subtitle">Teacher absence tracking — institutional desktop app</p>
-          <p class="project-desc">
+          <p class="project-subtitle" data-i18n="p4.subtitle">Teacher absence tracking — institutional desktop app</p>
+          <p class="project-desc" data-i18n="p4.desc">
             Group project developed for ITI-UTU. Administrative staff log teacher absences;
             the system calculates affected student groups and displays current absences
             on a read-only screen designed for hall monitors.
@@ -689,7 +716,7 @@
           <div class="project-links">
             <a class="project-link" href="https://github.com/Caliburno/RegistroInasistencias" target="_blank" rel="noopener">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.1.82-.26.82-.57v-2c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.48.99.1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.69.82.57C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-              Source
+              <span data-i18n="link.source">Source</span>
             </a>
           </div>
         </div>
@@ -701,9 +728,9 @@
 
     <!-- CONTACT -->
     <section id="contact">
-      <p class="section-label">Contact</p>
-      <h2 class="section-title">Let's talk</h2>
-      <p>
+      <p class="section-label" data-i18n="contact.label">Contact</p>
+      <h2 class="section-title" data-i18n="contact.title">Let's talk</h2>
+      <p data-i18n="contact.p">
         I'm actively looking for a role in software development.
         If you have an opportunity or just want to connect, reach out.
       </p>
@@ -714,7 +741,7 @@
         </a>
         <a class="contact-btn" href="mailto:dario.buffa@gmail.com">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-          Email
+          <span data-i18n="contact.email">Email</span>
         </a>
         <a class="contact-btn" href="https://www.linkedin.com/in/dario-buffa" target="_blank" rel="noopener">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.37V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.26 2.37 4.26 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.8 24 1.77 24h20.45C23.2 24 24 23.23 24 22.27V1.73C24 .77 23.2 0 22.22 0z"/></svg>
@@ -726,8 +753,126 @@
   </main>
 
   <footer>
-    <p>© 2026 Caliburno · Built with vanilla HTML/CSS · Hosted on GitHub Pages</p>
+    <p data-i18n="footer">© 2026 Caliburno · Built with vanilla HTML/CSS · Hosted on GitHub Pages</p>
   </footer>
+
+  <script>
+    // ─── Translations ──────────────────────────────────────────
+    const translations = {
+      en: {
+        "nav.about": "About",
+        "nav.skills": "Skills",
+        "nav.projects": "Projects",
+        "nav.contact": "Contact",
+        "hero.eyebrow": "Backend Developer",
+        "hero.tagline": "I build backend systems that solve real problems — clean architecture, practical design, software that gets used.",
+        "hero.cta": "View projects",
+        "about.label": "About",
+        "about.title": "Who I am",
+        "about.p1": "I'm a self-taught backend developer based in <strong>Montevideo, Uruguay</strong>, currently completing a degree in informatics at UTU's Instituto Tecnológico de Informática (ITI). My focus is <strong>Java and Spring Boot</strong>, building systems with clean architecture, proper separation of concerns, and real-world use cases in mind.",
+        "about.p2": "I don't build toy apps. Every project in this portfolio started as a real need — a working academy, a private clinic, an institutional system. I'm looking for a professional role in software development, where I can contribute solid backend fundamentals and keep growing fast.",
+        "skills.label": "Technical stack",
+        "skills.title": "What I work with",
+        "skills.primary": "Primary",
+        "skills.apis": "APIs & Web",
+        "skills.databases": "Databases",
+        "skills.secondary": "Secondary",
+        "skills.tools": "Tools",
+        "projects.label": "Work",
+        "projects.title": "Projects",
+        "p1.flag": "Flagship",
+        "p1.subtitle": "Full-stack management system for a real English academy",
+        "p1.desc": "Tracks student enrollments, monthly payments, exam registrations, sibling discounts, and generates financial reports. Built with a dual-architecture approach: a RESTful API backend and a Thymeleaf web interface sharing the same business logic layer. Actively used in production.",
+        "p2.flag": "In Development",
+        "p2.subtitle": "Clinic accounting SaaS — in active development",
+        "p2.desc": "A web-based clinic management system built for a private psychology practice, evolving from two earlier desktop versions (Java Swing, Python/Tkinter). The current web version is being developed for commercial distribution to healthcare professionals. Real user, real data, real feedback loop.",
+        "p3.evolution": "Evolution: CLI → REST API",
+        "p3.subtitle": "Inventory system — from command line to RESTful web service",
+        "p3.desc": "Two projects, one story. CLInventory is a full-featured CLI inventory manager built as a first Python exercise. APInventory is its direct evolution into a Flask REST API — with the same database layer unchanged. The pair demonstrates that modular architecture isn't just theory: the business logic survived a complete interface swap without rewriting.",
+        "p4.subtitle": "Teacher absence tracking — institutional desktop app",
+        "p4.desc": "Group project developed for ITI-UTU. Administrative staff log teacher absences; the system calculates affected student groups and displays current absences on a read-only screen designed for hall monitors. Built with a team of three, coordinating backend logic, database design, and frontend.",
+        "link.source": "Source",
+        "contact.label": "Contact",
+        "contact.title": "Let's talk",
+        "contact.email": "Email",
+        "contact.p": "I'm actively looking for a role in software development. If you have an opportunity or just want to connect, reach out.",
+        "footer": "© 2026 Caliburno · Built with vanilla HTML/CSS · Hosted on GitHub Pages"
+      },
+      es: {
+        "nav.about": "Sobre mí",
+        "nav.skills": "Tecnologías",
+        "nav.projects": "Proyectos",
+        "nav.contact": "Contacto",
+        "hero.eyebrow": "Desarrollador Backend",
+        "hero.tagline": "Construyo sistemas backend que resuelven problemas reales — arquitectura limpia, diseño práctico, software que se usa.",
+        "hero.cta": "Ver proyectos",
+        "about.label": "Sobre mí",
+        "about.title": "Quién soy",
+        "about.p1": "Soy desarrollador backend autodidacta, radicado en <strong>Montevideo, Uruguay</strong>, cursando actualmente el bachillerato en informática en el Instituto Tecnológico de Informática (ITI) de UTU. Mi foco es <strong>Java y Spring Boot</strong>, construyendo sistemas con arquitectura limpia, separación de responsabilidades y casos de uso reales en mente.",
+        "about.p2": "No construyo apps de juguete. Cada proyecto de este portfolio nació de una necesidad real — una academia en funcionamiento, una clínica privada, un sistema institucional. Busco mi primer rol profesional en desarrollo de software, donde pueda aportar fundamentos sólidos de backend y seguir creciendo rápido.",
+        "skills.label": "Stack técnico",
+        "skills.title": "Con qué trabajo",
+        "skills.primary": "Principal",
+        "skills.apis": "APIs y Web",
+        "skills.databases": "Bases de datos",
+        "skills.secondary": "Secundario",
+        "skills.tools": "Herramientas",
+        "projects.label": "Trabajo",
+        "projects.title": "Proyectos",
+        "p1.flag": "Proyecto estrella",
+        "p1.subtitle": "Sistema de gestión full-stack para una academia de inglés real",
+        "p1.desc": "Gestiona inscripciones de alumnos, pagos mensuales, registro de exámenes, descuentos por hermanos y genera reportes financieros. Construido con un enfoque de arquitectura dual: un backend de API REST y una interfaz web en Thymeleaf que comparten la misma capa de lógica de negocio. En uso activo en producción.",
+        "p2.flag": "En desarrollo",
+        "p2.subtitle": "SaaS de contabilidad para clínicas — en desarrollo activo",
+        "p2.desc": "Un sistema web de gestión para clínicas, construido para un consultorio privado de psicología, que evoluciona desde dos versiones de escritorio anteriores (Java Swing, Python/Tkinter). La versión web actual se está desarrollando para distribución comercial a profesionales de la salud. Usuario real, datos reales, ciclo de feedback real.",
+        "p3.evolution": "Evolución: CLI → API REST",
+        "p3.subtitle": "Sistema de inventario — de línea de comandos a servicio web REST",
+        "p3.desc": "Dos proyectos, una historia. CLInventory es un gestor de inventario por línea de comandos, construido como primer ejercicio en Python. APInventory es su evolución directa a una API REST en Flask — con la misma capa de base de datos sin cambios. El par demuestra que la arquitectura modular no es solo teoría: la lógica de negocio sobrevivió a un cambio completo de interfaz sin reescribirse.",
+        "p4.subtitle": "Registro de inasistencias docentes — app de escritorio institucional",
+        "p4.desc": "Proyecto grupal desarrollado para ITI-UTU. El personal administrativo registra las inasistencias de los docentes; el sistema calcula los grupos afectados y muestra las ausencias actuales en una pantalla de solo lectura, diseñada para los monitores del hall. Construido en equipo de tres, coordinando lógica de backend, diseño de base de datos y frontend.",
+        "link.source": "Código",
+        "contact.label": "Contacto",
+        "contact.title": "Hablemos",
+        "contact.email": "Email",
+        "contact.p": "Estoy buscando activamente mi primer rol en desarrollo de software. Si tenés una oportunidad o simplemente querés conectar, escribime.",
+        "footer": "© 2026 Caliburno · Hecho con HTML/CSS vanilla · Alojado en GitHub Pages"
+      }
+    };
+
+    // ─── Apply a language ──────────────────────────────────────
+    function applyLanguage(lang) {
+      const dict = translations[lang];
+      if (!dict) return;
+      document.querySelectorAll('[data-i18n]').forEach(function (el) {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key] !== undefined) el.innerHTML = dict[key];
+      });
+      document.documentElement.lang = lang;
+      // The button shows the language you can switch TO
+      const toggle = document.getElementById('lang-toggle');
+      toggle.textContent = lang === 'en' ? 'ES' : 'EN';
+      toggle.setAttribute('aria-label', lang === 'en' ? 'Cambiar a español' : 'Switch to English');
+      try { localStorage.setItem('lang', lang); } catch (e) {}
+    }
+
+    // ─── Decide the initial language ───────────────────────────
+    function initLanguage() {
+      let lang;
+      try { lang = localStorage.getItem('lang'); } catch (e) {}
+      if (!lang) {
+        lang = (navigator.language || 'en').toLowerCase().startsWith('es') ? 'es' : 'en';
+      }
+      applyLanguage(lang);
+    }
+
+    // ─── Wire up the toggle ────────────────────────────────────
+    document.getElementById('lang-toggle').addEventListener('click', function () {
+      const current = document.documentElement.lang === 'es' ? 'es' : 'en';
+      applyLanguage(current === 'en' ? 'es' : 'en');
+    });
+
+    initLanguage();
+  </script>
 
 </body>
 </html>
